@@ -16,13 +16,3 @@ export default function RootLayout() {
 
     )
 }
-
-const styles = StyleSheet.create({
-    title: {
-        fontSize: 20,
-        fontWeight: "bold",
-        textAlign: "center",
-        marginTop: 10,
-        color: "#2761ffff"
-    }
-})
