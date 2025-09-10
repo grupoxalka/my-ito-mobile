@@ -6,7 +6,7 @@ const svgPath = "M19.7 3h-15a1.5 1.5 0 00-1.5 1.5v15A1.5 1.5 0 004.7 21h15a1.5 1
 const clipPath = "url(#clip0_2970_867)";
 const clipPathID = "clip0_2970_867";
 const clipPathTransform = "translate(0.2)";
-export default function IconMessages(props: SvgProps) {
+export default function IconMessagesFilled(props: SvgProps) {
   return (
     <BaseIcon
       path={svgPath}
