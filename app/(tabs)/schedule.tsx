@@ -3,7 +3,7 @@ import { Link, Stack } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function ArchivosScreen() {
+export default function ScheduleScreen() {
     return (
         <View>
             <Stack.Screen options={{
@@ -13,7 +13,7 @@ export default function ArchivosScreen() {
                     </Link>
                 ),
             }} />
-            <Text>Archivos</Text>
+            <Text>Horario</Text>
         </View>
     );
 }

@@ -4,7 +4,9 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@icons/*": ["components/icons/*"]
+      "@icons/*": ["components/icons/*"],
+      "@constants": ["constants/index"],
+      "@constants/*": ["constants/*"]
     }
   }
   

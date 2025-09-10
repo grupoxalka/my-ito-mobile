@@ -5,19 +5,19 @@ import IconNotification from "@icons/IconNotification";
 import IconUser from "@icons/IconUser";
 import Logo from "components/Logo";
 
-export default function InicioScreen() {
+export default function HomeScreen() {
 
   return (
     <View>
       <Stack.Screen options={{
         headerTitle : () => <Logo />,
         headerLeft: () => (
-          <Link href="/perfil" asChild>
+          <Link href="/profile" asChild>
             <IconUser />
           </Link>
         ),
         headerRight: () => (
-          <Link href="/noticias" asChild>
+          <Link href="/news" asChild>
             <IconNotification />
           </Link>
         ),

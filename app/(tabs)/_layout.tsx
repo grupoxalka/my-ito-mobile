@@ -8,6 +8,13 @@ import IconHomeFilled from "@icons/IconHomeFilled";
 import IconCalendarFilled from "@icons/IconCalendarFilled";
 import IconFileFilled from "@icons/IconFileFilled";
 import IconMessagesFilled from "@icons/IconMessagesFilled";
+import {
+  TAB_INDEX,
+  TAB_SCHEDULE,
+  TAB_FILES,
+  TAB_MESSAGES,
+  TAB_PROFILE
+} from "@constants";
 
 
 export default function TabsLayout() {
@@ -19,11 +26,12 @@ export default function TabsLayout() {
                 tabBarInactiveTintColor : "#637087",
                 headerTitleAlign: "center",
                 headerRightContainerStyle : {paddingRight : 16},
-                headerLeftContainerStyle : {paddingLeft : 16}
+                headerLeftContainerStyle : {paddingLeft : 16},
+                tabBarLabelStyle : {fontSize: 12}
             }}
         >
             <Tabs.Screen
-                name="index"
+                name={TAB_INDEX}
                 options={{
                     title: "Inicio",
                     tabBarIcon: ({ color, focused }) => focused
@@ -31,7 +39,7 @@ export default function TabsLayout() {
                         : <IconHome color={color} />,
                 }} />
             <Tabs.Screen
-                name="horario"
+                name={TAB_SCHEDULE}
                 options={{
                     title: "Horario",
                     tabBarIcon: ({ color, focused }) => focused
@@ -39,7 +47,7 @@ export default function TabsLayout() {
                         : <IconCalendar color={color} />,
                 }} />
             <Tabs.Screen
-                name="archivos"
+                name={TAB_FILES}
                 options={{
                     title: "Archivos",
                     tabBarIcon: ({ color, focused }) => focused
@@ -47,7 +55,7 @@ export default function TabsLayout() {
                         : <IconFile color={color} />,
                 }} />
             <Tabs.Screen
-                name="mensajes"
+                name={TAB_MESSAGES}
                 options={{
                     title: "Mensajes",
                     tabBarIcon: ({ color, focused }) => focused
@@ -55,7 +63,7 @@ export default function TabsLayout() {
                         : <IconMessages color={color} />
                 }} />
             <Tabs.Screen
-                name="perfil"
+                name={TAB_PROFILE}
                 options={{
                     title: "Perfil",
                     tabBarIcon: ({ color }) => <IconUser color={color} />

@@ -3,7 +3,7 @@ import { Stack } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function PerfilScreen() {
+export default function ProfileScreen() {
     return (
         <View>
             <Stack.Screen options={{

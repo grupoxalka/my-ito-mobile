@@ -10,12 +10,11 @@ export default function Logo() {
         QwitcherGrypen: require('../assets/fonts/QwitcherGrypen-Bold.ttf'),
     });
 
-    if (!fontLoaded) {
-        return null; 
-    }
+    const fontFamily = fontLoaded ? 'QwitcherGrypen' : 'System';
+
     return (
         <View style= {styles.container}>
-            <Text style={[styles.customFont]}>My</Text>
+            <Text style={[styles.customFont, { fontFamily }]}>My</Text>
             <Text style={styles.text}> ITO</Text>
         </View>
     )
