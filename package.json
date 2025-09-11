@@ -1,7 +1,7 @@
 {
   "name": "my-ito-mobile",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -11,10 +11,15 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.1",
     "expo": "~53.0.22",
+    "expo-constants": "~17.1.7",
     "expo-font": "~13.3.2",
+    "expo-linking": "~7.1.7",
+    "expo-router": "~5.1.6",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.6",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2"
   },
   "devDependencies": {
