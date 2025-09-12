@@ -12,13 +12,7 @@ export function ThemedText({
 }: ThemedTextProps) {
   return (
     <Text
-      style={[
-        styles.default,
-        type === "title" && styles.title,
-        type === "defaultBold" && styles.defaultBold,
-        type === "link" && styles.link,
-        style,
-      ]}
+      style={[styles[type], style]}
       {...rest}
     />
   );
