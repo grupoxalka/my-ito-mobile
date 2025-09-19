@@ -7,6 +7,7 @@ import { View, StyleSheet, Alert, } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { authServiceLogin } from "services/authService";
 import { useAppStore } from "store";
+import IconQuestion from "@icons/IconQuestion";
 
 
 export default function LoginScreen() {
@@ -34,8 +35,9 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.centered}>
+      <View style={styles.titleContainer}>
         <Logo />
+        <IconQuestion style={styles.icon} />
       </View>
       <View style={styles.fieldContainer}>
         <ThemedText>Correo electrónico</ThemedText>
@@ -79,16 +81,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-
+    paddingHorizontal: 16,
+  },
+  titleContainer: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  icon:{
+    position: "absolute",
+    right: 0,
+    top: "50%",
+    transform: [{ translateY: -12 }],
   },
   fieldContainer: {
     marginBottom: 12,
-    paddingHorizontal: 16,
     gap: 8,
   },
   centered: {
     alignItems: "center",
-    gap: 8,
+    gap: 14,
     marginTop: 16,
   }
 });

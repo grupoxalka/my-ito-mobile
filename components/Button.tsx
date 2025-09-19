@@ -20,8 +20,6 @@ const styles = StyleSheet.create({
     container: {
         alignSelf: "stretch",
         alignItems: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 16,
     },
     button: {
         alignItems: 'center',

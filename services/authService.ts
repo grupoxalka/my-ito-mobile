@@ -1,5 +1,6 @@
 import { API_URL } from "@constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 interface LoginParams {
     email: string;
@@ -7,19 +8,15 @@ interface LoginParams {
 }
 export async function authServiceLogin({ email, password }: LoginParams) {
     try {
-        const response = await fetch(`${API_URL}/auth/sign-in`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
+        const response = await axios.post(`${API_URL}/auth/sign-in`, {
+            email,
+            password
         });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
             throw new Error('Login failed');
         }
-
-        const data = await response.json();
+        const data = response.data;
         storeToken(data.token);
 
     } catch (error) {
@@ -29,9 +26,9 @@ export async function authServiceLogin({ email, password }: LoginParams) {
 }
 
 async function storeToken(value: string) {
-  try {
-    await AsyncStorage.setItem('token', value);
-  } catch (e) {
-    console.error('Failed to save the token to storage', e);
-  }
+    try {
+        await AsyncStorage.setItem('token', value);
+    } catch (e) {
+        console.error('Failed to save the token to storage', e);
+    }
 }
