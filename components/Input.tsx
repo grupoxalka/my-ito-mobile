@@ -4,8 +4,8 @@ import { View, Text, TextInput, TextInputProps, StyleSheet, } from 'react-native
 interface InputProps extends TextInputProps {
   label?: string;
   secure?: boolean;
-  value: string;
-  onChangeText: (text:string) => void;
+  value?: string;
+  onChangeText?: (text:string) => void;
 }
 
 const Input = forwardRef<TextInput, InputProps>(

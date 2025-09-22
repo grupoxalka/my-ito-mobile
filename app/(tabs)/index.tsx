@@ -1,16 +1,30 @@
-import { Link, Stack } from "expo-router";
-import React from "react";
+import { Link, Redirect, Stack } from "expo-router";
+import React, { useEffect } from "react";
 import { Text, View } from "react-native";
 import IconNotification from "@icons/IconNotification";
 import IconUser from "@icons/IconUser";
 import Logo from "components/Logo";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAppStore } from "store";
 export default function HomeScreen() {
+  const {isAuthenticated, setIsAuthenticated} = useAppStore();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setIsAuthenticated(!!token);
+    };
+    checkAuth();
+  }, []);
+
+  if (!isAuthenticated) {
+    return <Redirect href="/login" />;
+  }
 
   return (
     <View>
       <Stack.Screen options={{
-        headerTitle : () => <Logo />,
+        headerTitle: () => <Logo />,
         headerLeft: () => (
           <Link href="/profile" asChild>
             <IconUser />
