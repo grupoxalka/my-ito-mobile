@@ -30,14 +30,12 @@ export default function CreatePassword() {
         newPassword: password,
         confirmedPassword: confirmPassword,
       }
-      const res = await authServiceForgotPassword(body);
+      await authServiceForgotPassword(body);
       Alert.alert("Éxito", "Tu contraseña ha sido restablecida correctamente.");
       router.navigate("/login");
-      console.log(res);
 
     } catch (error) {
       Alert.alert("Error", "No se pudo restablecer la contraseña. Intenta de nuevo.");
-      console.error(error);
     }
   }
 
