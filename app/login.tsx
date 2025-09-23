@@ -4,23 +4,23 @@ import Button from "components/Button";
 import { ThemedText } from "components/ThemedText";
 import React, { useState } from "react";
 import { View, StyleSheet, Alert, } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { Link, router } from "expo-router";
 import { authServiceLogin } from "services/authService";
 import { useAppStore } from "store";
 import IconQuestion from "@icons/IconQuestion";
+import { AlertType } from "enums";
+import { ROUTES } from "@constants";
 
 
 export default function LoginScreen() {
   const { setIsAuthenticated } = useAppStore();
-  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   async function handleLogin() {
-
     if (!email || !password) {
-      Alert.alert("Error", "Por favor ingresa correo y contraseña.");
+      Alert.alert(AlertType.Error, "Por favor ingresa correo y contraseña.");
       return;
     }
 
@@ -29,16 +29,18 @@ export default function LoginScreen() {
       router.replace("/");
       setIsAuthenticated(true);
     } catch (error) {
-      Alert.alert("Error", "Credenciales incorrectas o error de red.");
+      Alert.alert(AlertType.Error, "Credenciales incorrectas o error de red.");
     }
   }
 
   return (
     <View style={styles.container}>
+
       <View style={styles.titleContainer}>
         <Logo />
         <IconQuestion style={styles.icon} />
       </View>
+
       <View style={styles.fieldContainer}>
         <ThemedText>Correo electrónico</ThemedText>
         <Input
@@ -59,15 +61,15 @@ export default function LoginScreen() {
         />
       </View>
 
-      <Button title="Iniciar sesión" onPress={handleLogin} />
+      <Button title="Iniciar sesión" onPress={handleLogin} style={styles.button} />
 
-      <View style={styles.centered}>
+      <View style={styles.linksContainer}>
 
-        <Link href="/register" asChild>
+        <Link href={ROUTES.REGISTER} asChild>
           <ThemedText type="link">¿Olvidó su número de control?</ThemedText>
         </Link>
 
-        <Link href="/reset-password" asChild>
+        <Link href={ROUTES.FORGOT_PASSWORD} asChild>
           <ThemedText type="link">¿Olvidó su contraseña?</ThemedText>
         </Link>
 
@@ -82,6 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: 16,
+    backgroundColor: "#fff",
   },
   titleContainer: {
     alignItems: "center",
@@ -94,12 +97,15 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -12 }],
   },
   fieldContainer: {
-    marginBottom: 12,
+    marginVertical: 12,
     gap: 8,
   },
-  centered: {
+  linksContainer: {
     alignItems: "center",
-    gap: 14,
-    marginTop: 16,
-  }
+    gap: 16,
+    marginTop: 12,
+  },
+  button: {
+    marginVertical: 12,
+  },
 });
