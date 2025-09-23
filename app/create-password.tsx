@@ -1,6 +1,8 @@
+import { ROUTES } from "@constants";
 import Button from "components/Button";
 import Input from "components/Input";
 import { ThemedText } from "components/ThemedText";
+import { AlertType } from "enums";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
@@ -10,32 +12,32 @@ import { ForgotPasswordParams } from "types";
 export default function CreatePassword() {
   const { email } = useLocalSearchParams();
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
 
   async function handleSubmit() {
-    if (!password || !confirmPassword) {
-      Alert.alert("Error", "Por favor ingresa y confirma tu nueva contraseña.");
+    if (!newPassword || !confirmedPassword) {
+      Alert.alert(AlertType.Error, "Por favor ingresa y confirma tu nueva contraseña.");
       return;
     }
 
-    if (password !== confirmPassword) {
-      Alert.alert("Error", "Las contraseñas no coinciden.");
+    if (newPassword !== confirmedPassword) {
+      Alert.alert(AlertType.Error, "Las contraseñas no coinciden.");
       return;
     }
 
     try {
       const body : ForgotPasswordParams = {
         email: email as string,
-        newPassword: password,
-        confirmedPassword: confirmPassword,
+        newPassword,
+        confirmedPassword,
       }
       await authServiceForgotPassword(body);
-      Alert.alert("Éxito", "Tu contraseña ha sido restablecida correctamente.");
-      router.navigate("/login");
+      Alert.alert(AlertType.Success, "Tu contraseña ha sido restablecida correctamente.");
+      router.navigate(ROUTES.LOGIN);
 
     } catch (error) {
-      Alert.alert("Error", "No se pudo restablecer la contraseña. Intenta de nuevo.");
+      Alert.alert(AlertType.Error, "No se pudo restablecer la contraseña. Intenta de nuevo.");
     }
   }
 
@@ -51,14 +53,14 @@ export default function CreatePassword() {
         <ThemedText>Asegúrate de elegir una contraseña segura que puedas recordar fácilmente.</ThemedText>
         <Input
           placeholder="Nueva Contraseña"
-          value={password}
-          onChangeText={setPassword}
+          value={newPassword}
+          onChangeText={setNewPassword}
           secure
         />
         <Input
           placeholder="Repite la Contraseña"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
+          value={confirmedPassword}
+          onChangeText={setConfirmedPassword}
           secure
         />
         <Button title="Restablecer" onPress={handleSubmit}/>

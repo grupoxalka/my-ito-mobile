@@ -1,6 +1,8 @@
+import { ROUTES } from "@constants";
 import Button from "components/Button";
 import Input from "components/Input";
 import { ThemedText } from "components/ThemedText";
+import { AlertType } from "enums";
 import { Stack, router } from "expo-router";
 import React, { useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
@@ -10,14 +12,14 @@ export default function ForgotPassword() {
 
   function handleSubmit() {
     if(!email) {
-      Alert.alert("Error", "Por favor ingresa tu correo o número de control.");
+      Alert.alert(AlertType.Error, "Por favor ingresa tu correo o número de control.");
       return;
     }
 
     //TODO: Send an email to reset password
     //Meanwhile, just navigates to create-password screen with email as param
     router.push({
-      pathname: "/create-password",
+      pathname: ROUTES.CREATE_PASSWORD,
       params: { email },
     });
     

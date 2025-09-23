@@ -8,6 +8,8 @@ import { Link, router } from "expo-router";
 import { authServiceLogin } from "services/authService";
 import { useAppStore } from "store";
 import IconQuestion from "@icons/IconQuestion";
+import { AlertType } from "enums";
+import { ROUTES } from "@constants";
 
 
 export default function LoginScreen() {
@@ -18,7 +20,7 @@ export default function LoginScreen() {
 
   async function handleLogin() {
     if (!email || !password) {
-      Alert.alert("Error", "Por favor ingresa correo y contraseña.");
+      Alert.alert(AlertType.Error, "Por favor ingresa correo y contraseña.");
       return;
     }
 
@@ -27,7 +29,7 @@ export default function LoginScreen() {
       router.replace("/");
       setIsAuthenticated(true);
     } catch (error) {
-      Alert.alert("Error", "Credenciales incorrectas o error de red.");
+      Alert.alert(AlertType.Error, "Credenciales incorrectas o error de red.");
     }
   }
 
@@ -63,11 +65,11 @@ export default function LoginScreen() {
 
       <View style={styles.linksContainer}>
 
-        <Link href="/register" asChild>
+        <Link href={ROUTES.REGISTER} asChild>
           <ThemedText type="link">¿Olvidó su número de control?</ThemedText>
         </Link>
 
-        <Link href="/forgot-password" asChild>
+        <Link href={ROUTES.FORGOT_PASSWORD} asChild>
           <ThemedText type="link">¿Olvidó su contraseña?</ThemedText>
         </Link>
 
