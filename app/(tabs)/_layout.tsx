@@ -27,7 +27,8 @@ export default function TabsLayout() {
                 headerTitleAlign: "center",
                 headerRightContainerStyle : {paddingRight : 16},
                 headerLeftContainerStyle : {paddingLeft : 16},
-                tabBarLabelStyle : {fontSize: 12}
+                tabBarLabelStyle : {fontSize: 12},
+                headerStatusBarHeight : 0,
             }}
         >
             <Tabs.Screen
