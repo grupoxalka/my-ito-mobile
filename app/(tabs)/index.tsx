@@ -6,6 +6,7 @@ import IconUser from "@icons/IconUser";
 import Logo from "components/Logo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppStore } from "store";
+import { ROUTES } from "@constants";
 export default function HomeScreen() {
   const {isAuthenticated, setIsAuthenticated} = useAppStore();
 
@@ -26,12 +27,12 @@ export default function HomeScreen() {
       <Stack.Screen options={{
         headerTitle: () => <Logo />,
         headerLeft: () => (
-          <Link href="/profile" asChild>
+          <Link href={ROUTES.PROFILE} asChild>
             <IconUser />
           </Link>
         ),
         headerRight: () => (
-          <Link href="/news" asChild>
+          <Link href={ROUTES.ANNOUNCEMENTS} asChild>
             <IconNotification />
           </Link>
         ),
