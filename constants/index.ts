@@ -10,6 +10,10 @@ export const ROUTES = {
     FORGOT_PASSWORD: "/forgot-password",
     CREATE_PASSWORD: "/create-password",
     REGISTER: "/register",
+    ANNOUNCEMENTS: "/announcements",
+    PROFILE: "/profile",
+    SCHEDULE: "/schedule",
+    FILES: "/files",
 } as const;
 
 export const API_URL = 'https://api.gpiconta.com/ito';
