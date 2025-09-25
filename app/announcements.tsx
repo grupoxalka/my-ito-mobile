@@ -37,6 +37,9 @@ interface AnnouncementItem {
 export default function AnnouncementsScreen() {
 
   // TODO: Replace with real data from API
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+
   /** 
    * Dummy data for announcements - should be replaced with API call
    * @type {AnnouncementItem[]}
@@ -47,21 +50,21 @@ export default function AnnouncementsScreen() {
       image: "https://tinyurl.com/imgtecnm1",
       title: "ITO Organiza el Simposio Tecnológico Anual",
       description: "El Instituto Tecnológico de Orizaba se enorgullece en anunciar su simposio tecnológico anual, que contará con talleres, charlas y competencias.",
-      date: Date.now()
+      date: now
     },
     {
       id: 2,
       image: "https://tinyurl.com/imgtecnm4",
       title: "Feria de Empleo Conecta a Estudiantes con Empresas Líderes",
       description: "Se llevó a cabo una feria de empleo en ITO, conectando a estudiantes con empresas líderes para prácticas y oportunidades laborales.",
-      date: Date.now()
+      date: now - oneDay
     },
     {
       id: 3,
       image: "https://tinyurl.com/imgtecnm3",
       title: "Nuevo Laboratorio de Robótica Abre en ITO",
       description: "ITO inauguró un nuevo laboratorio de robótica, equipado con tecnología de vanguardia para apoyar proyectos y investigaciones estudiantiles.",
-      date: Date.now()
+      date: now - 2 * oneDay
     }
   ];
 

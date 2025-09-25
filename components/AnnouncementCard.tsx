@@ -65,7 +65,7 @@ export default function AnnouncementCard({ title, description, image, date }: An
     return (
         <View style={styles.container}>
             {/* Announcement image with rounded corners */}
-            <Image source={{ uri: image }} alt={title} style={styles.image} />
+            <Image source={{ uri: image }} accessibilityLabel={title} style={styles.image} />
             
             {/* Text content container */}
             <View style={styles.descriptionContainer}>
