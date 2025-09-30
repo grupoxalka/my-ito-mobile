@@ -18,3 +18,14 @@ export function formatDate(timestamp: number) {
     const formattedDate = date.toLocaleDateString('es-ES', options);
     return `Publicado el ${formattedDate}`;
 }
+
+/**
+ * Formats a Unix timestamp into a readable date string
+ * @param {number} ts - Unix timestamp in milliseconds
+ * @returns  Formatted date string (DD/MM/YYYY)
+ */
+export function formatTimestamp(ts: number) {
+    const date = new Date(ts);
+    // Format as DD/MM/YYYY (month is 0-indexed, so we add 1)
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+}
