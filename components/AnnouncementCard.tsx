@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText";
+import { formatDate } from "utils";
 
 /**
  * Props for the AnnouncementCard component
@@ -41,26 +42,6 @@ interface AnnouncementCardProps {
  * ```
  */
 export default function AnnouncementCard({ title, description, image, date }: AnnouncementCardProps) {
-
-    /**
-     * Formats a timestamp to a readable date in Spanish
-     * 
-     * @param timestamp - Timestamp in milliseconds since Unix epoch
-     * @returns Formatted string as "Publicado el [date]"
-     * 
-     * @example
-     * formatDate(1695565200000) // "Publicado el 24 de septiembre de 2023"
-     */
-    function formatDate(timestamp: number) {
-        const date = new Date(timestamp);
-        const options: Intl.DateTimeFormatOptions = { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        };
-        const formattedDate = date.toLocaleDateString('es-ES', options);
-        return `Publicado el ${formattedDate}`;
-    }
 
     return (
         <View style={styles.container}>
