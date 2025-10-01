@@ -33,7 +33,7 @@ export default function ChatScreen() {
     const dummyChatMessages = [
         {
             id: 1,
-            title: "ITO Organiza el Simposio Tecnologico Anual",
+            title: "ITO Organiza el Simposio Tecnológico Anual",
             message: "El Instituto Tecnológico de Orizaba se enorgullece en anunciar su simposio tecnológico anual, que contará con talleres, charlas y competencias.",
             date: Date.now() - 86400000
         },
