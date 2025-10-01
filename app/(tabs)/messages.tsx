@@ -88,10 +88,4 @@ const styles = StyleSheet.create({
         color: "#333",
     },
     
-    /** Style for message text (currently unused) */
-    messageText: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginVertical: 10,
-    },
 })
