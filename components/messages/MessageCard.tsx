@@ -1,6 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { Link } from "expo-router";
+import { formatTimestamp } from "utils";
 
 /**
  * Props interface for MessageCard component
@@ -30,7 +31,7 @@ interface MessageCardProps {
  * 
  * @component
  * @param {MessageCardProps} props - The props for the MessageCard component
- * @returns {JSX.Element} A pressable card with contact info and message preview
+ * @returns A pressable card with contact info and message preview
  * 
  * @example
  * ```tsx
@@ -53,17 +54,6 @@ interface MessageCardProps {
  * - Responsive layout with proper spacing
  */
 export default function MessageCard({ chat_id, name, rol, image, last_message, timestamp }: MessageCardProps) {
-
-    /**
-     * Formats a Unix timestamp into a readable date string
-     * @param {number} ts - Unix timestamp in milliseconds
-     * @returns {string} Formatted date string (DD/MM/YYYY)
-     */
-    function formatTimestamp(ts: number) {
-        const date = new Date(ts);
-        // Format as DD/MM/YYYY (month is 0-indexed, so we add 1)
-        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-    }
 
     return (
         // Link wrapper for navigation to individual chat screen
