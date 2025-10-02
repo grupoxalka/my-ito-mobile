@@ -18,19 +18,18 @@ import { Image, StyleSheet, View } from "react-native";
  * 
  * @returns The profile screen component
  */
+// TODO: Replace with actual API call to fetch user data
+// Currently using mock data for development purposes
+const userData = {
+    id: '12345678',
+    name: 'Ricardo',
+    career: 'Ciencias de la computación',
+    semester: 6,
+    grade: "8.5",
+    profileImage: 'https://randomuser.me/api/portraits/lego/5.jpg'
+}
+
 export default function ProfileScreen() {
-
-    // TODO: Replace with actual API call to fetch user data
-    // Currently using mock data for development purposes
-    const userData = {
-        id: '12345678',
-        name: 'Ricardo',
-        career: 'Ciencias de la computación',
-        semester: 6,
-        grade: "8.5",
-        profileImage: 'https://randomuser.me/api/portraits/lego/5.jpg'
-    }
-
     return (
         <View style={styles.container}>
             {/* Configure header with app logo */}
