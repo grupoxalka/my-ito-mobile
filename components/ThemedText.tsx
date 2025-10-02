@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 28,
     color: "#121217",
+    marginTop: 20,
+    marginBottom: 8,
+    marginHorizontal: 16,
   },
   link: {
     fontSize: 14,
