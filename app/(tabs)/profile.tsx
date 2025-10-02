@@ -7,17 +7,6 @@ import { ThemedText } from "components/ThemedText";
 import { Stack } from "expo-router";
 import { Image, StyleSheet, View } from "react-native";
 
-/**
- * ProfileScreen Component
- * 
- * Displays the user's profile information including personal details,
- * academic status, and performance metrics. This screen shows:
- * - Profile picture and basic information
- * - Student ID and career information
- * - Current semester and GPA
- * 
- * @returns The profile screen component
- */
 // TODO: Replace with actual API call to fetch user data
 // Currently using mock data for development purposes
 const userData = {
@@ -29,6 +18,18 @@ const userData = {
     profileImage: 'https://randomuser.me/api/portraits/lego/5.jpg'
 }
 
+
+/**
+ * ProfileScreen Component
+ * 
+ * Displays the user's profile information including personal details,
+ * academic status, and performance metrics. This screen shows:
+ * - Profile picture and basic information
+ * - Student ID and career information
+ * - Current semester and GPA
+ * 
+ * @returns The profile screen component
+ */
 export default function ProfileScreen() {
     return (
         <View style={styles.container}>
