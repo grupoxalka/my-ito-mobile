@@ -1,0 +1,19 @@
+my-ito-mobile@1.0.0 C:\Users\aylin\my-ito-mobile
+Ôö£ÔöÇÔöÇ @babel/core@7.28.4
+Ôö£ÔöÇÔöÇ @expo-google-fonts/inter@0.4.2
+Ôö£ÔöÇÔöÇ @react-native/virtualized-lists@0.72.8 extraneous
+Ôö£ÔöÇÔöÇ @types/react-native@0.72.8 extraneous
+Ôö£ÔöÇÔöÇ @types/react@19.0.14
+Ôö£ÔöÇÔöÇ expo-constants@17.1.7 invalid: "~18.0.0" from the root project
+Ôö£ÔöÇÔöÇ expo-font@13.3.2 invalid: "~14.0.0" from the root project
+Ôö£ÔöÇÔöÇ expo-linking@7.1.7 invalid: "~8.0.0" from the root project
+Ôö£ÔöÇÔöÇ expo-router@5.1.6 invalid: "~5.2.0" from the root project
+Ôö£ÔöÇÔöÇ expo-status-bar@2.2.3 invalid: "~2.3.0" from the root project
+Ôö£ÔöÇÔöÇ expo@53.0.22 invalid: "~54.0.0" from the root project
+Ôö£ÔöÇÔöÇ react-native-safe-area-context@5.4.0 invalid: "4.8.0" from the root project
+Ôö£ÔöÇÔöÇ react-native-screens@4.11.1 invalid: "~3.29.0" from the root project
+Ôö£ÔöÇÔöÇ react-native-svg@15.11.2 invalid: "13.9.0" from the root project
+Ôö£ÔöÇÔöÇ react-native@0.79.5 invalid: "0.73.4" from the root project
+Ôö£ÔöÇÔöÇ react@19.0.0 invalid: "18.0.2" from the root project
+ÔööÔöÇÔöÇ typescript@5.8.3
+

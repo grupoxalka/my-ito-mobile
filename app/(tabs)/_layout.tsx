@@ -8,6 +8,7 @@ import IconHomeFilled from "@icons/IconHomeFilled";
 import IconCalendarFilled from "@icons/IconCalendarFilled";
 import IconFileFilled from "@icons/IconFileFilled";
 import IconMessagesFilled from "@icons/IconMessagesFilled";
+import { Stack } from "expo-router";
 import {
   TAB_INDEX,
   TAB_SCHEDULE,
@@ -27,7 +28,15 @@ export default function TabsLayout() {
                 headerTitleAlign: "center",
                 headerRightContainerStyle : {paddingRight : 16},
                 headerLeftContainerStyle : {paddingLeft : 16},
-                tabBarLabelStyle : {fontSize: 12}
+                tabBarLabelStyle : {fontSize: 12},
+
+                headerStyle: {
+                     backgroundColor: "white",
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0, 
+
+                }
             }}
         >
             <Tabs.Screen
