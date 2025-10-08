@@ -10,25 +10,20 @@ export function ThemedText({
   type = "default",
   ...rest
 }: ThemedTextProps) {
-  return (
-    <Text
-      style={[styles[type], style]}
-      {...rest}
-    />
-  );
+  return <Text style={[styles[type], style]} {...rest} />;
 }
 
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '500',
-    color: "#121217", 
+    fontWeight: "500",
+    color: "#121217",
   },
   defaultBold: {
     fontSize: 16,
     lineHeight: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     color: "#121217",
   },
   title: {
@@ -38,7 +33,6 @@ const styles = StyleSheet.create({
     color: "#121217",
     marginTop: 20,
     marginBottom: 8,
-    marginHorizontal: 16,
   },
   link: {
     fontSize: 14,

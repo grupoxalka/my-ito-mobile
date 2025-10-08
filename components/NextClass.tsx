@@ -1,20 +1,26 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "components/ThemedText";
 import IconThreeDots from "@icons/IconThreeDots";
 import IconTrash from "@icons/IconTrash";
 import IconEye from "@icons/IconEye";
 
-export default function NextClass() {
+type NextClassProps = {
+  name: string;
+  room: string;
+  time: string;
+};
+
+export default function NextClass({ room, name, time }: NextClassProps) {
   return (
     <View style={styles.nextClassContainer}>
       <View style={{ flex: 1 }}>
         <ThemedText type="link">Próxima clase</ThemedText>
-        <ThemedText type="defaultBold">Cálculo II</ThemedText>
-        <ThemedText type="link">Aula 203</ThemedText>
+        <ThemedText type="defaultBold">{name}</ThemedText>
+        <ThemedText type="link">Aula {room}</ThemedText>
       </View>
 
       <View style={styles.timeBox}>
-        <ThemedText type="defaultBold">01:00</ThemedText>
+        <ThemedText type="defaultBold">{time}</ThemedText>
       </View>
       <View
         style={{
@@ -27,7 +33,9 @@ export default function NextClass() {
           backgroundColor: "#CBD2D6",
         }}
       >
-        <IconThreeDots />
+        <TouchableOpacity>
+          <IconThreeDots />
+        </TouchableOpacity>
       </View>
       {/* <View style={{ flexDirection: "row", gap: 1 }}>
         <View style={[styles.slideOptionBox, { backgroundColor: "#B8EAAB" }]}>
