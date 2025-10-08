@@ -2,7 +2,7 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 export type ThemedTextProps = TextProps & {
-  type?: "default" | "defaultBold" | "title" | "link";
+  type?: "default" | "defaultBold" | "title" | "link" | "description";
 };
 
 export function ThemedText({
@@ -41,5 +41,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: "#636E87",
+  },
+  description: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: "#61758A",
   },
 });

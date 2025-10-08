@@ -1,14 +1,15 @@
 
-import {View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ComponentProps } from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, ViewProps } from 'react-native';
 
-interface ButtonProps {
+interface ButtonProps extends ViewProps {
   title: string;
   onPress?: () => void;
 }
 
-export default function Button({ title, onPress }: ButtonProps) {
+export default function Button({ title, onPress, style }: ButtonProps) {
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, style]}>
         <TouchableOpacity onPress={onPress} style={styles.button}>
         <Text style={styles.text}>{title}</Text>
         </TouchableOpacity>
@@ -20,8 +21,6 @@ const styles = StyleSheet.create({
     container: {
         alignSelf: "stretch",
         alignItems: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 16,
     },
     button: {
         alignItems: 'center',

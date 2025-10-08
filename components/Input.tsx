@@ -4,8 +4,8 @@ import { View, Text, TextInput, TextInputProps, StyleSheet, } from 'react-native
 interface InputProps extends TextInputProps {
   label?: string;
   secure?: boolean;
-  value: string;
-  onChangeText: (text:string) => void;
+  value?: string;
+  onChangeText?: (text:string) => void;
 }
 
 const Input = forwardRef<TextInput, InputProps>(
@@ -37,7 +37,6 @@ export default Input;
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
-    marginBottom: 16,
   },
   label: {
     fontSize: 16,
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   inputContainer: {
-    height: 56,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,

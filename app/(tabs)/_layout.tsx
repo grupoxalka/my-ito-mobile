@@ -29,6 +29,7 @@ export default function TabsLayout() {
                 headerRightContainerStyle : {paddingRight : 16},
                 headerLeftContainerStyle : {paddingLeft : 16},
                 tabBarLabelStyle : {fontSize: 12},
+<<<<<<< HEAD
 
                 headerStyle: {
                      backgroundColor: "white",
@@ -37,6 +38,10 @@ export default function TabsLayout() {
                     borderBottomWidth: 0, 
 
                 }
+=======
+                headerStatusBarHeight : 0,
+                headerShadowVisible : false,
+>>>>>>> main
             }}
         >
             <Tabs.Screen

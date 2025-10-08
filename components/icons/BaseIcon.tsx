@@ -8,6 +8,7 @@ interface BaseIconProps extends SvgProps {
     path: string;
     clipPath: string;
     clipPathID: string;
+    clipPathTransform?: string;
 }
 export default function BaseIcon({
     width = 24,
@@ -38,7 +39,7 @@ export default function BaseIcon({
             </G>
             <Defs>
                 <ClipPath id={clipPathID}>
-                    <Path fill="#fff" d={rectPath} clipPathTransform={clipPathTransform} />
+                    <Path fill="#fff" d={rectPath} transform={clipPathTransform} />
                 </ClipPath>
             </Defs>
         </Svg>
