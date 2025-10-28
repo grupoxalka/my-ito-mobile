@@ -9,10 +9,6 @@ import { useAppStore } from "store";
 import { ROUTES } from "@constants";
 import { ThemedText } from "components/ThemedText";
 import Button from "components/Button";
-import SubjectCard from "components/SubjectCard";
-import IconFile from "@icons/IconFile";
-import IconCalendar from "@icons/IconCalendar";
-import IconGraph from "@icons/IconGraph";
 import NextClass from "components/NextClass";
 import IconAdd from "@icons/IconAdd";
 import { Bar, CartesianChart } from "victory-native";
@@ -44,8 +40,8 @@ const dummyTodayClassesData = {
 };
 
 const dummyCreditsData = {
-  current_credits: 30,
-  remaining_credits: 70,
+  current_credits: 70,
+  remaining_credits: 30,
 };
 
 const dummyGradesData = {
@@ -67,9 +63,7 @@ const dummyGradesData = {
 };
 
 const data = Array.from({ length: 6 }, (_, index) => ({
-  // Starting at 1 for January
   month: index + 1,
-  // Randomizing the listen count between 100 and 50
   listenCount: Math.floor(Math.random() * (100 - 50 + 1)) + 50,
 }));
 
@@ -116,45 +110,57 @@ export default function HomeScreen() {
           <IconAdd />
         </Button>
 
-        <ThemedText type="title">Grafica Pendiente</ThemedText>
+        <ThemedText type="title">Grafica pendiente</ThemedText>
 
-        <View>
-          <ThemedText>Creitos Complementarios</ThemedText>
-          <ThemedText>75%</ThemedText>
-          <ThemedText>Total:</ThemedText>
-
-          {/* Grafica */}
-          <CartesianChart
-            data={data}
-            /**
-             * 👇 the xKey should map to the property on data of you want on the x-axis
-             */
-            xKey="month"
-            /**
-             * 👇 the yKey is an array of strings that map to the data you want
-             * on the y-axis. In this case we only want the listenCount, but you could
-             * add additional if you wanted to show multiple song listen counts.
-             */
-            yKeys={["listenCount"]}
-          >
-            {({ points, chartBounds }) => (
-              <Bar
-                chartBounds={chartBounds} // 👈 chartBounds is needed to know how to draw the bars
-                points={points.listenCount} // 👈 points is an object with a property for each yKey
-              />
-            )}
-          </CartesianChart>
+        <View
+          style={{
+            borderRadius: 12,
+            borderWidth: 1,
+            padding: 24,
+            borderColor: "#DBDEE5",
+            alignItems: "center",
+          }}
+        >
+          <ThemedText>Creditos Completados</ThemedText>
+          <ThemedText type="percentage">75%</ThemedText>
+          <ThemedText type="link">Total:</ThemedText>
+          <>
+            {/* Grafica */}
+            {/* <BarChart
+              data={[
+                {
+                  value: dummyCreditsData.current_credits,
+                  label: "Creditos",
+                  frontColor: "#98CAFD",
+                },
+                {
+                  value: dummyCreditsData.remaining_credits,
+                  label: "Restantes",
+                  frontColor: "#4CA6FF",
+                },
+              ]}
+              noOfSections={2}
+              yAxisThickness={0}
+              xAxisThickness={0}
+              barWidth={55}
+            /> */}
+          </>
         </View>
         <View>
           <ThemedText>Calificacones/Puntajes</ThemedText>
-          <ThemedText>88</ThemedText>
-          <ThemedText>Promedio</ThemedText>
+          <ThemedText type="percentage">88</ThemedText>
+          <ThemedText type="link">Promedio</ThemedText>
           {/* Grafica */}
         </View>
       </View>
     </View>
   );
 }
+
+const barData = [
+  { value: dummyCreditsData.current_credits },
+  { value: dummyCreditsData.remaining_credits },
+];
 
 const styles = StyleSheet.create({
   className: {
