@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
   nextClassContainer: {
     alignSelf: "stretch",
     alignItems: "center",
-    padding: 16,
     flexDirection: "row",
+    paddingVertical: 16,
     gap: 16,
   },
   slideOptionBox: {
