@@ -4,19 +4,13 @@ import { Text, View } from "react-native";
 import IconNotification from "@icons/IconNotification";
 import IconUser from "@icons/IconUser";
 import Logo from "components/Logo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppStore } from "store";
 import { ROUTES } from "@constants";
-export default function HomeScreen() {
-  const {isAuthenticated, setIsAuthenticated} = useAppStore();
+import { useAuth } from "hooks/useAuth";
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setIsAuthenticated(!!token);
-    };
-    checkAuth();
-  }, []);
+export default function HomeScreen() {
+  const {isAuthenticated} = useAppStore();
+  useAuth();
 
   if (!isAuthenticated) {
     return <Redirect href="/login" />;

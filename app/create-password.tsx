@@ -6,7 +6,7 @@ import { AlertType } from "enums";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import { authServiceForgotPassword } from "services/authService";
+import { authService } from "services/authService";
 import { ForgotPasswordParams } from "types";
 
 export default function CreatePassword() {
@@ -32,7 +32,7 @@ export default function CreatePassword() {
         newPassword,
         confirmedPassword,
       }
-      await authServiceForgotPassword(body);
+      await authService.forgotPassword(body);
       Alert.alert(AlertType.Success, "Tu contraseña ha sido restablecida correctamente.");
       router.navigate(ROUTES.LOGIN);
 
