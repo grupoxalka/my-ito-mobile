@@ -17,6 +17,7 @@ export const ROUTES = {
 } as const;
 
 export const API_URL = 'https://api.gpiconta.com/ito';
+export const TOKEN_KEY = 'token';
 
 // Dummy data for messages
 // This should be replaced with real data from the API

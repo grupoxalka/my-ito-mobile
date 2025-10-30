@@ -5,7 +5,7 @@ import { ThemedText } from "components/ThemedText";
 import React, { useState } from "react";
 import { View, StyleSheet, Alert, } from "react-native";
 import { Link, router } from "expo-router";
-import { authServiceLogin } from "services/authService";
+import { authService } from "services/authService";
 import { useAppStore } from "store";
 import IconQuestion from "@icons/IconQuestion";
 import { AlertType } from "enums";
@@ -25,7 +25,7 @@ export default function LoginScreen() {
     }
 
     try {
-      await authServiceLogin({ email, password });
+      await authService.login({ email, password });
       router.replace("/");
       setIsAuthenticated(true);
     } catch (error) {
