@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
 import { useAppStore } from 'store';
+import { decodeToken, getToken, isTokenValid, removeToken } from 'utils';
 
 interface JWTPayload {
   userId: string;
@@ -13,32 +14,45 @@ export const useAuth = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        if (token) {
-          const decoded = jwtDecode<JWTPayload>(token);
-          
-          // Verificar si el token ha expirado
-          if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-            await AsyncStorage.removeItem("token");
-            setIsAuthenticated(false);
-            setUserId(null);
-            return;
-          }
-          
-          setUserId(decoded.userId);
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-          setUserId(null);
-        }
-      } catch (error) {
-        console.error("Error checking auth:", error);
+
+      const resetAuth = () => {
         setIsAuthenticated(false);
         setUserId(null);
+      };
+
+      try {
+        const token = await getToken();
+
+        if (!token) {
+          resetAuth();
+          return;
+        }
+
+        if (!isTokenValid(token)) {
+          await removeToken();
+          resetAuth();
+          return;
+        }
+
+        // Decode token to get user ID
+        const decoded = decodeToken(token);
+
+        if (!decoded) {
+          await removeToken();
+          resetAuth();
+          return;
+        }
+
+        // Update global state
+        setUserId(decoded.userId);
+        setIsAuthenticated(true);
+
+      } catch (error) {
+        console.error("Error checking auth:", error);
+        resetAuth();
       }
     };
-    
+
     checkAuth();
   }, [setIsAuthenticated, setUserId]);
 };

@@ -1,17 +1,14 @@
 import { API_URL } from "@constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { getToken } from "utils";
 
 
 export const userService = {
     getUserProfile: async (userId: string) => {
         try {
             // Obtener el token de AsyncStorage
-            const token = await AsyncStorage.getItem("token");
-            
-            if (!token) {
-                throw new Error('No authentication token found');
-            }
+            const token = await getToken();
 
             const response = await axios.get(`${API_URL}/students/${userId}`, {
                 headers: {

@@ -1,14 +1,14 @@
 import { API_URL } from "@constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { ForgotPasswordParams, LoginParams } from "types";
+import { setToken } from "utils";
 
 export const authService = {
     async login(body: LoginParams) {
         try {
             const response = await axios.post(`${API_URL}/auth/sign-in`, body);
             const data = response.data;
-            storeToken(data.token);
+            setToken(data.token);
         } catch (error) {
             console.error(error);
             throw new Error('Login failed');
@@ -25,12 +25,3 @@ export const authService = {
         }
     }
 };
-
-
-async function storeToken(value: string) {
-    try {
-        await AsyncStorage.setItem('token', value);
-    } catch (e) {
-        console.error('Failed to save the token to storage', e);
-    }
-}

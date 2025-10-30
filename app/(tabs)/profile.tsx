@@ -24,7 +24,20 @@ import { UserProfile } from "types";
 export default function ProfileScreen() {
     const { userId } = useAppStore();
 
-    const [userData, setUserData] = useState<UserProfile | null>(null);
+    const [userData, setUserData] = useState<UserProfile>({
+        id: '',
+        email: '',
+        phone: '',
+        name: '',
+        paternalSurname: '',
+        maternalSurname: '',
+        studentDetails: {
+            career: '',
+            currentSemester: 0,
+            gpa: 0,
+            controlNumber: ''
+        }
+    });
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -61,7 +74,7 @@ export default function ProfileScreen() {
     }
 
     // No data state
-    if (!userData) {
+    if (!userData.id) {
         return (
             <View style={styles.screenContainer}>
                 <Stack.Screen options={{ headerTitle: () => <Logo /> }} />

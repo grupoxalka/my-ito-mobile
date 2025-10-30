@@ -25,3 +25,8 @@ export interface UserProfile {
     };
     createdAt?: string;
 }
+
+export interface JWTPayload {
+  userId: string;
+  exp?: number;
+}
