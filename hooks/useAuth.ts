@@ -1,13 +1,6 @@
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
 import { useAppStore } from 'store';
 import { decodeToken, getToken, isTokenValid, removeToken } from 'utils';
-
-interface JWTPayload {
-  userId: string;
-  exp?: number;
-}
 
 export const useAuth = () => {
   const { setIsAuthenticated, setUserId } = useAppStore();
