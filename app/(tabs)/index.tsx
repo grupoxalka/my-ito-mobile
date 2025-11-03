@@ -1,5 +1,5 @@
 import { Link, Redirect, Stack } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
 import IconNotification from "@icons/IconNotification";
 import IconUser from "@icons/IconUser";
@@ -12,6 +12,8 @@ import Button from "components/Button";
 import NextClass from "components/NextClass";
 import IconAdd from "@icons/IconAdd";
 import { BarChart, LineChart } from "react-native-gifted-charts";
+import { ModalNotification } from "components/ModalNotification";
+const colors = ["#98CAFD", "#4CA6FF", "#2196f3", "#ff9800"];
 
 const dummyTodayClassesData = {
   classes: [
@@ -39,39 +41,37 @@ const dummyTodayClassesData = {
   ],
 };
 
-const colors = ["#98CAFD", "#4CA6FF", "#2196f3", "#ff9800"];
-
 const dummyCreditsData = {
   current_credits: 70,
   remaining_credits: 30,
 };
 
 const dummyGradesData = {
-  average_grade: 8.5,
+  average_grade: 86,
   semesters: [
     {
       semester_number: 1,
-      grade: 8.0,
+      grade: 80,
     },
     {
       semester_number: 2,
-      grade: 10.0,
+      grade: 100,
     },
     {
       semester_number: 3,
-      grade: 8.5,
+      grade: 85,
     },
     {
       semester_number: 4,
-      grade: 7.6,
+      grade: 76,
     },
     {
       semester_number: 5,
-      grade: 8.2,
+      grade: 82,
     },
     {
       semester_number: 6,
-      grade: 8.5,
+      grade: 85,
     },
   ],
 };
@@ -97,9 +97,23 @@ const lineData = dummyGradesData.semesters.map((semester) => ({
 const minValue = Math.min(...dummyGradesData.semesters.map((s) => s.grade));
 const maxValue =
   Math.max(...dummyGradesData.semesters.map((s) => s.grade)) - minValue;
+const creditPercentage = Math.round(
+  (dummyCreditsData.current_credits /
+    (dummyCreditsData.current_credits + dummyCreditsData.remaining_credits)) *
+    100
+);
 
 export default function HomeScreen() {
   const { isAuthenticated, setIsAuthenticated } = useAppStore();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<
+    typeof dummyTodayClassesData.classes
+  >([]);
+
+  const handleSelectClass = (newClass: any) => {
+    setSelectedClass((prev) => [...prev, newClass]);
+  };
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -143,7 +157,10 @@ export default function HomeScreen() {
           </View>
           <NextClass name="Calculo" room="L6" time="02:00" />
           <View style={styles.boxContainer}>
-            <Button title="Añadir nuevo recordatorio">
+            <Button
+              title="Añadir nuevo recordatorio"
+              onPress={() => setModalVisible(true)}
+            >
               <IconAdd />
             </Button>
           </View>
@@ -154,7 +171,7 @@ export default function HomeScreen() {
           <View style={{ gap: 16 }}>
             <View style={styles.chartBoxContainer}>
               <ThemedText>Creditos Completados</ThemedText>
-              <ThemedText type="percentage">75%</ThemedText>
+              <ThemedText type="percentage">{creditPercentage}%</ThemedText>
               <ThemedText type="link">Total:</ThemedText>
               <View style={{ padding: 10, alignSelf: "center" }}>
                 <BarChart
@@ -173,7 +190,9 @@ export default function HomeScreen() {
             </View>
             <View style={styles.chartBoxContainer}>
               <ThemedText>Calificaciones/Puntajes</ThemedText>
-              <ThemedText type="percentage">88</ThemedText>
+              <ThemedText type="percentage">
+                {dummyGradesData.average_grade}
+              </ThemedText>
               <ThemedText type="link">Promedio</ThemedText>
               {/* Grafica */}
               <View style={{ padding: 10, alignItems: "center" }}>
@@ -187,7 +206,8 @@ export default function HomeScreen() {
                   maxValue={maxValue}
                   yAxisOffset={minValue}
                   initialSpacing={40}
-                  spacing={90}
+                  endSpacing={-30}
+                  spacing={100}
                   hideDataPoints
                   hideRules
                   hideYAxisText
@@ -199,6 +219,12 @@ export default function HomeScreen() {
           </View>
         </View>
       </ScrollView>
+      <ModalNotification
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSelect={handleSelectClass}
+        classes={dummyTodayClassesData.classes}
+      />
     </View>
   );
 }
