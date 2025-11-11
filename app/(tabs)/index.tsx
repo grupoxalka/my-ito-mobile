@@ -13,7 +13,6 @@ import NextClass from "components/NextClass";
 import IconAdd from "@icons/IconAdd";
 import { BarChart, LineChart } from "react-native-gifted-charts";
 import { ModalNotification } from "components/ModalNotification";
-const colors = ["#98CAFD", "#4CA6FF", "#2196f3", "#ff9800"];
 
 const dummyTodayClassesData = {
   classes: [
@@ -155,7 +154,18 @@ export default function HomeScreen() {
           <View style={styles.boxContainer}>
             <ThemedText type="title">Recordatorio</ThemedText>
           </View>
-          <NextClass name="Calculo" room="L6" time="02:00" />
+          {/* <View style={styles.boxContainer}>
+            <NextClass name="Calculo" room="L6" time="02:00" />
+          </View> */}
+          {selectedClass.map((classItem) => (
+            <View key={classItem.id}>
+              <NextClass
+                name={classItem.name}
+                room="L6"
+                time={classItem.initial_time}
+              />
+            </View>
+          ))}
           <View style={styles.boxContainer}>
             <Button
               title="Añadir nuevo recordatorio"
@@ -224,6 +234,7 @@ export default function HomeScreen() {
         onClose={() => setModalVisible(false)}
         onSelect={handleSelectClass}
         classes={dummyTodayClassesData.classes}
+        selectedClasses={selectedClass}
       />
     </View>
   );
