@@ -6,75 +6,57 @@ import IconBack from "@icons/IconBack";
 import { PieChart } from "react-native-gifted-charts";
 
 export default function AttendanceScreen() {
-    const { subject } = useLocalSearchParams();
+    const { subject, subjectName, teacherName, classroomName, startTime, endTime } = useLocalSearchParams();
 
-    const getSubjectData = () => {
-        const subjects = {
-            programacion: {
-                title: "Programación",
-                schedule: "1:00 PM - 2:00 PM",
-            },
-            calculo: {
-                title: "Cálculo I", 
-                schedule: "8:00 AM - 9:00 AM",
-            },
-            fisica: {
-                title: "Física II",
-                schedule: "9:00 AM - 10:00 AM", 
-            },
-            quimica: {
-                title: "Química",
-                schedule: "10:00 AM - 11:00 AM",
-            },
-            algebra: {
-                title: "Álgebra Lineal",
-                schedule: "11:00 AM - 12:00 PM",
-            }
-        };
-        return subjects[subject as keyof typeof subjects] || subjects.programacion;
-    };
+    // Use the data passed from the schedule screen
+    const displayName = subjectName || subject;
+    const displaySchedule = (startTime && endTime) ? `${startTime} - ${endTime}` : '';
+    const displayTeacher = teacherName || '';
+    const displayClassroom = classroomName || '';
 
-    const subjectData = getSubjectData();
+    // Hardcoded attendance data:
+    const attendancePercentage = 65;
+    const absencePercentage = 35;
 
     
     const pieData = [
         {
-            value: 55, 
+            value: attendancePercentage, 
             color: '#1EACFF',
-            text: '45%',
+            text: `${attendancePercentage}%`,
             textSize: 16,
         },
         {
-            value: 45,
+            value: absencePercentage,
             color: '#F44336', 
-            text: '55%',
+            text: `${absencePercentage}%`,
             textSize: 16,
         }
     ];
 
     return (
         <View style={styles.fullWhite}>
-            <Stack.Screen options={{ headerShown: false }} />
+            <Stack.Screen options={{ 
+                headerTitle: "Horario",
+                headerTitleAlign: 'center',
+                headerShadowVisible: false,
+                headerShown: true,
+             }} />
             
             <StatusBar backgroundColor="white" barStyle="dark-content" />
-            
-           
-            <View style={styles.customHeader}>
-                <Link href="/schedule" asChild>
-                    <TouchableOpacity style={styles.backButton}>
-                        <IconBack />
-                    </TouchableOpacity>
-                </Link>
-                <Text style={styles.headerTitle}>Horario</Text>
-                <View style={styles.placeholder} />
-            </View>
             
             <View style={styles.content}>
                 
                 <View style={styles.subjectContainer}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.titlee}>{subjectData.title}</Text>
-                        <Text style={styles.schedule}>{subjectData.schedule}</Text>
+                        <Text style={styles.titlee}>{displayName}</Text>
+                        <Text style={styles.schedule}>{displaySchedule}</Text>
+                        {displayTeacher && (
+                            <Text style={styles.teacherText}>Catedrático: {displayTeacher}</Text>
+                        )}
+                        {displayClassroom && (
+                            <Text style={styles.classroomText}>Aula: {displayClassroom}</Text>
+                        )}
                     </View>
                 </View>
 
@@ -166,6 +148,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#876363",
         marginTop: 4,
+    },
+    teacherText: {
+        color: "#876363",
+        marginTop: 2,
+    },
+    classroomText: {
+        color: "#876363",
+        marginTop: 2,
     },
     upperCenteredContainer: {
         

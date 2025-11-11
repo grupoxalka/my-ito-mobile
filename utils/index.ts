@@ -13,14 +13,14 @@ import { JWTPayload } from "types";
  * formatDate(1695565200000) // "Publicado el 24 de septiembre de 2023"
  */
 export function formatDate(timestamp: number) {
-    const date = new Date(timestamp);
-    const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-    const formattedDate = date.toLocaleDateString('es-ES', options);
-    return `Publicado el ${formattedDate}`;
+  const date = new Date(timestamp);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+  const formattedDate = date.toLocaleDateString('es-ES', options);
+  return `Publicado el ${formattedDate}`;
 }
 
 /**
@@ -29,9 +29,9 @@ export function formatDate(timestamp: number) {
  * @returns  Formatted date string (DD/MM/YYYY)
  */
 export function formatTimestamp(ts: number) {
-    const date = new Date(ts);
-    // Format as DD/MM/YYYY (month is 0-indexed, so we add 1)
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  const date = new Date(ts);
+  // Format as DD/MM/YYYY (month is 0-indexed, so we add 1)
+  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 }
 
 /**
@@ -78,11 +78,11 @@ export const removeToken = async () => {
 export const isTokenValid = (token: string): boolean => {
   try {
     const decoded = jwtDecode<JWTPayload>(token);
-    
+
     if (decoded.exp && decoded.exp * 1000 < Date.now()) {
       return false;
     }
-    
+
     return true;
   } catch (error) {
     console.error('Error validating token:', error);
@@ -102,4 +102,11 @@ export const decodeToken = (token: string) => {
     console.error('Error decoding token:', error);
     return null;
   }
+};
+
+// Helper function to capitalize first letter of each word
+export const capitalizeWords = (str: string) => {
+  return str.split(' ').map(word =>
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join(' ');
 };

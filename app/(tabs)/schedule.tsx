@@ -1,17 +1,73 @@
-import { Asset } from "expo-asset";
-import { setStatusBarBackgroundColor } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import { Link } from "expo-router";
 import IconBack from "@icons/IconBack";
-import { Text, View, StyleSheet, StatusBar, Image, TouchableOpacity, Modal, ScrollView } from "react-native";
-import { PieChart } from "react-native-gifted-charts"
-
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import userService from "services/userService";
+import { useAppStore } from "store";
+import Logo from "components/Logo";
+import { ThemedText } from "components/ThemedText";
+import IconCode from "@icons/IconCode";
+import { Schedule, DayOfWeek } from "types";
+import { DAYS } from "constants/index";
 
 
 export default function ScheduleScreen() {
-    const [selectedSubject, setSelectedSubject] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
+
+    const [selectedDay, setSelectedDay] = useState<DayOfWeek>('MONDAY');
+    const [schedule, setSchedule] = useState<Schedule[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const { userId } = useAppStore();
+
+    useEffect(() => {
+        const getUserSchedule = async () => {
+            if (!userId) {
+                setIsLoading(false);
+                return;
+            };
+
+            try {
+                setIsLoading(true);
+                const data = await userService.getStudentSchedule(userId);
+                setSchedule(data);
+                console.log("cargando horario");
+            } catch (error) {
+                console.error("Error fetching schedule:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        getUserSchedule();
+    }, []);
+
+    // Loading state
+    if (isLoading) {
+        return (
+            <View style={styles.screenContainer}>
+                <Stack.Screen options={{ headerTitle: () => <Logo /> }} />
+                <View style={styles.container}>
+                    <ActivityIndicator size="large" color="#0066CC" />
+                    <ThemedText style={styles.loadingText}>Cargando horario...</ThemedText>
+                </View>
+            </View>
+        );
+    }
+
+    // No data state
+    if (!schedule.length) {
+        return (
+            <View style={styles.screenContainer}>
+                <Stack.Screen options={{ headerTitle: () => <Logo /> }} />
+                <View style={styles.container}>
+                    <ThemedText>No tienes un horario asignado</ThemedText>
+                </View>
+            </View>
+        );
+    }
+
+    // Filter schedule by selected day
+    const daySchedule = schedule.filter(item => item.dayOfWeek === selectedDay);
 
     return (
 
@@ -22,85 +78,73 @@ export default function ScheduleScreen() {
                         <IconBack />
                     </Link>
                 ),
+                headerTitle: "Horario",
+                headerTitleAlign: 'center',
+                headerShown: true,
             }} />
-            <StatusBar backgroundColor="white" barStyle="dark-content" />
 
-
+            {/* Days tabs */}
             <View style={styles.daysContainer}>
-
-                <Text style={styles.dayText}>Lun</Text>
-                <Text style={styles.dayyText}>Mar</Text>
-                <Text style={styles.dayyText}>Mié</Text>
-                <Text style={styles.dayyText}>Jue</Text>
-                <Text style={styles.dayyText}>Vie</Text>
-
-
+                {DAYS.map((day) => (
+                    <TouchableOpacity
+                        key={day.key}
+                        onPress={() => setSelectedDay(day.key)}
+                    >
+                        <Text style={[
+                            styles.dayText,
+                            selectedDay === day.key ? styles.dayTextActive : styles.dayTextInactive
+                        ]}>
+                            {day.label}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
             </View>
+
             <View style={styles.separator} />
-            <Link href={{ pathname: "/attendance/[subject]", params: { subject: "calculo" } }} asChild>
-                <TouchableOpacity>
-                    <Image
-                        source={require("../../assets/images/Calculo.png")}
-                        style={{ width: 48, height: 48, borderRadius: 8, marginLeft: 16, marginTop: 20 }}
-                    />
-                    <Text style={styles.titlee}>Cálculo I</Text>
-                    <Text style={styles.schedule}>8:00 AM - 9:00 AM</Text>
-                </TouchableOpacity>
-            </Link>
 
+            {/* Render schedule for selected day */}
+            <ScrollView style={styles.scheduleList}>
+                {daySchedule.length > 0 ? (
+                    daySchedule.map((item, index) => (
+                        <Link
+                            key={index}
+                            href={{
+                                pathname: "/attendance/[subject]",
+                                params: { 
+                                    subject: item.subjectName.toLowerCase().replace(/\s+/g, '-'),
+                                    subjectName: item.subjectName,
+                                    teacherName: item.teacherName,
+                                    classroomName: item.classroomName,
+                                    startTime: item.startTime,
+                                    endTime: item.endTime
+                                }
+                            }}
+                            asChild
+                        >
+                            <TouchableOpacity style={styles.scheduleItem}>
+                                <View style={styles.subjectIconContainer}>
+                                    <IconCode />
+                                </View>
+                                <View style={styles.scheduleInfo}>
+                                    <ThemedText>{item.subjectName}</ThemedText>
 
-            <Link href={{ pathname: "/attendance/[subject]", params: { subject: "fisica" } }} asChild>
-                <TouchableOpacity>
-                    <Image
-                        source={require("../../assets/images/Fisica.png")}
-                        style={{ width: 48, height: 48, borderRadius: 8, marginLeft: 16, marginTop: 20 }}
-                    />
-                    <Text style={styles.titlee}>Física II</Text>
-                    <Text style={styles.schedule}>9:00 AM - 10:00 AM</Text>
-                </TouchableOpacity>
-            </Link>
-
-
-
-            <Link href={{ pathname: "/attendance/[subject]", params: { subject: "quimica" } }} asChild>
-                <TouchableOpacity>
-                    <Image
-                        source={require("../../assets/images/Quimica.png")}
-                        style={{ width: 48, height: 48, borderRadius: 8, marginLeft: 16, marginTop: 20 }}
-                    />
-                    <Text style={styles.titlee}>Química</Text>
-                    <Text style={styles.schedule}>10:00 AM - 11:00 AM</Text>
-                </TouchableOpacity>
-            </Link>
-
-
-
-            <Link href={{ pathname: "/attendance/[subject]", params: { subject: "algebra" } }} asChild>
-                <TouchableOpacity>
-                    <Image
-                        source={require("../../assets/images/AlgebraLineal.png")}
-                        style={{ width: 48, height: 48, borderRadius: 8, marginLeft: 16, marginTop: 20 }}
-                    />
-                    <Text style={styles.titlee}>Álgebra Lineal</Text>
-                    <Text style={styles.schedule}>11:00 AM - 12:00 PM</Text>
-                </TouchableOpacity>
-            </Link>
-
-            <Link href={{ pathname: "/attendance/[subject]", params: { subject: "programacion" } }} asChild>
-  <TouchableOpacity>
-    <Image 
-      source={require("../../assets/images/Programacion.png")} 
-      style={{width: 48, height: 48, borderRadius:8, marginLeft:16, marginTop:20}} 
-    />
-    <Text style={styles.titlee}>Programación</Text>
-    <Text style={styles.schedule}>1:00 PM - 2:00 PM</Text>
-  </TouchableOpacity>
-</Link>
-
-
-
-
-
+                                    <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+                                        <ThemedText style={styles.schedule}>
+                                            {item.startTime} - {item.endTime}
+                                        </ThemedText>
+                                        <ThemedText style={styles.classroomText}>{item.classroomName}</ThemedText>
+                                    </View>
+                                    <ThemedText style={styles.teacherText}>Catedratico: {item.teacherName}</ThemedText>
+                                </View>
+                            </TouchableOpacity>
+                        </Link>
+                    ))
+                ) : (
+                    <View style={styles.noClassesContainer}>
+                        <ThemedText>No hay clases este día</ThemedText>
+                    </View>
+                )}
+            </ScrollView>
         </View>
     );
 }
@@ -140,33 +184,83 @@ const styles = StyleSheet.create({
         backgroundColor: "#E5DBDB",
         marginHorizontal: 0,
         marginBottom: 0,
-        padding: 1,
-        gap: 32,
-
-    },
-
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "#000",
-        paddingHorizontal: 16,
-
-    },
-
-    titlee: {
-        fontSize: 16,
-        marginTop: -45,
-        marginLeft: 80,
-        gap: 16,
-
     },
 
     schedule: {
-        fontSize: 14,
         color: "#876363",
-        marginLeft: 80,
+    },
 
-    }
+    // Loading and error styles
+    screenContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        gap: 24,
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        marginTop: 16,
+        textAlign: 'center',
+    },
+
+    dayTextActive: {
+        color: "#000",
+    },
+
+    dayTextInactive: {
+        color: "#876363",
+    },
+
+    scheduleList: {
+        flex: 1,
+    },
+
+    scheduleItem: {
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        paddingVertical: 16,
+    },
+
+    subjectImage: {
+        width: 48,
+        height: 48,
+        borderRadius: 8,
+    },
+
+    scheduleInfo: {
+        marginLeft: 16,
+        flex: 1,
+        justifyContent: 'center',
+    },
+
+    teacherText: {
+        color: "#876363",
+        fontWeight: "400",
+    },
+
+    classroomText: {
+        color: "#876363",
+    },
+
+    noClassesContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 40,
+    },
+
+    subjectIconContainer: {
+        width: 48,
+        height: 48,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f0f0',
+    },
 
 
 });
