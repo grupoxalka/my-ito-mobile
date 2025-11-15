@@ -1,6 +1,6 @@
 import { Link, Redirect, Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import IconNotification from "@icons/IconNotification";
 import IconUser from "@icons/IconUser";
 import Logo from "components/Logo";
@@ -19,7 +19,7 @@ const dummyTodayClassesData = {
     {
       id: "1",
       name: "Calculo II",
-      initial_time: "16:00",
+      initial_time: "00:00",
       end_time: "18:00",
       category: "Math",
     },
@@ -102,6 +102,86 @@ const creditPercentage = Math.round(
     100
 );
 
+function getTimeLeft(classTime: string | Date) {
+  const now = new Date();
+  let target: Date;
+
+  if (typeof classTime === "string" && classTime.length <= 5) {
+    const [hours, minutes] = classTime.split(":").map(Number);
+    target = new Date(now);
+    target.setHours(hours, minutes, 0, 0);
+
+    if (target <= now) {
+      target.setDate(target.getDate() + 1);
+    }
+  } else {
+    target = new Date(classTime);
+  }
+
+  const diff = target.getTime() - now.getTime();
+
+  if (diff <= 0) {
+    return { display: "0:00", finished: true, milliseconds: 0 };
+  }
+
+  const totalHours = diff / (1000 * 60 * 60);
+  const totalMinutes = diff / (1000 * 60);
+  const totalSeconds = diff / 1000;
+
+  let display: string;
+
+  if (totalHours >= 1) {
+    display = `${totalHours.toFixed(1)}hr`;
+  } else {
+    const minutes = Math.floor(totalMinutes);
+    const seconds = Math.floor(totalSeconds % 60);
+    display = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
+
+  return { display, finished: false, milliseconds: diff };
+}
+
+function useCountdown(classTime: string | Date) {
+  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(classTime));
+
+  useEffect(() => {
+    const getInterval = (ms: number) => {
+      if (ms < 60 * 60 * 1000) return 1000;
+      return 60000;
+    };
+
+    let intervalId: NodeJS.Timeout | null = null;
+
+    const update = () => {
+      const newTimeLeft = getTimeLeft(classTime);
+      setTimeLeft(newTimeLeft);
+
+      if (newTimeLeft.finished) {
+        if (intervalId) clearInterval(intervalId);
+        return;
+      }
+
+      const newInterval = getInterval(newTimeLeft.milliseconds);
+      if (intervalId) clearInterval(intervalId);
+      intervalId = setInterval(update, newInterval);
+    };
+
+    update();
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [classTime]);
+
+  return timeLeft;
+}
+
+function ClassCountdown({ classTime }: { classTime: string }) {
+  const timeLeft = useCountdown(classTime);
+
+  return <>{timeLeft.display}</>;
+}
+
 export default function HomeScreen() {
   const { isAuthenticated, setIsAuthenticated } = useAppStore();
 
@@ -111,7 +191,12 @@ export default function HomeScreen() {
   >([]);
 
   const handleSelectClass = (newClass: any) => {
-    setSelectedClass((prev) => [...prev, newClass]);
+    setSelectedClass((prev) => {
+      const updated = [...prev, newClass];
+      return updated.sort((a, b) =>
+        a.initial_time.localeCompare(b.initial_time)
+      );
+    });
   };
 
   useEffect(() => {
@@ -154,15 +239,12 @@ export default function HomeScreen() {
           <View style={styles.boxContainer}>
             <ThemedText type="title">Recordatorio</ThemedText>
           </View>
-          {/* <View style={styles.boxContainer}>
-            <NextClass name="Calculo" room="L6" time="02:00" />
-          </View> */}
           {selectedClass.map((classItem) => (
             <View key={classItem.id}>
               <NextClass
                 name={classItem.name}
                 room="L6"
-                time={classItem.initial_time}
+                time={<ClassCountdown classTime={classItem.initial_time} />}
               />
             </View>
           ))}
