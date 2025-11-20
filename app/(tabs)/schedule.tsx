@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import { Link } from "expo-router";
 import IconBack from "@icons/IconBack";
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
-import userService from "services/userService";
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from "react-native";
+import { userService } from "services/userService";
 import { useAppStore } from "store";
 import Logo from "components/Logo";
 import { ThemedText } from "components/ThemedText";
@@ -31,15 +31,14 @@ export default function ScheduleScreen() {
                 setIsLoading(true);
                 const data = await userService.getStudentSchedule(userId);
                 setSchedule(data);
-                console.log("cargando horario");
             } catch (error) {
-                console.error("Error fetching schedule:", error);
+                Alert.alert("Error", "No se pudo cargar el horario. Por favor, intenta de nuevo más tarde.");
             } finally {
                 setIsLoading(false);
             }
         }
         getUserSchedule();
-    }, []);
+    }, [userId]);
 
     // Loading state
     if (isLoading) {
@@ -89,6 +88,9 @@ export default function ScheduleScreen() {
                     <TouchableOpacity
                         key={day.key}
                         onPress={() => setSelectedDay(day.key)}
+                        accessibilityRole="tab"
+                        accessibilityLabel={`${day.label}`}
+                        accessibilityState={{ selected: selectedDay === day.key }}
                     >
                         <Text style={[
                             styles.dayText,
@@ -105,9 +107,9 @@ export default function ScheduleScreen() {
             {/* Render schedule for selected day */}
             <ScrollView style={styles.scheduleList}>
                 {daySchedule.length > 0 ? (
-                    daySchedule.map((item, index) => (
+                    daySchedule.map((item) => (
                         <Link
-                            key={index}
+                            key={`${item.groupCode}-${item.dayOfWeek}-${item.startTime}`}
                             href={{
                                 pathname: "/attendance/[subject]",
                                 params: { 
@@ -121,7 +123,11 @@ export default function ScheduleScreen() {
                             }}
                             asChild
                         >
-                            <TouchableOpacity style={styles.scheduleItem}>
+                            <TouchableOpacity 
+                                style={styles.scheduleItem}
+                                accessibilityLabel={`${item.subjectName} class`}
+                                accessibilityHint={`Opens details for ${item.subjectName} at ${item.startTime}`}
+                            >
                                 <View style={styles.subjectIconContainer}>
                                     <IconCode />
                                 </View>
@@ -134,7 +140,7 @@ export default function ScheduleScreen() {
                                         </ThemedText>
                                         <ThemedText style={styles.classroomText}>{item.classroomName}</ThemedText>
                                     </View>
-                                    <ThemedText style={styles.teacherText}>Catedratico: {item.teacherName}</ThemedText>
+                                    <ThemedText style={styles.teacherText}>Catedrático: {item.teacherName}</ThemedText>
                                 </View>
                             </TouchableOpacity>
                         </Link>

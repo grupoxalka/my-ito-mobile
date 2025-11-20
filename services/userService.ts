@@ -1,6 +1,6 @@
 import { API_URL } from "@constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Schedule } from "types";
 import { getToken } from "utils";
 
 
@@ -24,7 +24,7 @@ export const userService = {
         }
     },
 
-    getStudentSchedule: async (studentId: string) => {
+    getStudentSchedule: async (studentId: string): Promise<Schedule[]> => {
         try {
             // Obtener el token de AsyncStorage
             const token = await getToken();

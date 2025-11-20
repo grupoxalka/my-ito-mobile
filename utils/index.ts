@@ -104,9 +104,31 @@ export const decodeToken = (token: string) => {
   }
 };
 
-// Helper function to capitalize first letter of each word
+/**
+ * Capitalizes the first letter of each word in a string.
+ *
+ * @param str - The input string to capitalize.
+ * @returns The string with each word capitalized.
+ *
+ * @example
+ * capitalizeWords("hello world") // "Hello World"
+ */
 export const capitalizeWords = (str: string) => {
-  return str.split(' ').map(word =>
-    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  ).join(' ');
+  if (!str || str.trim().length === 0) return '';
+  // Replace multiple spaces with single space, trim
+  return str
+    .trim()
+    .replace(/\s+/g, ' ')
+    .split(' ')
+    .map(word =>
+      word
+        .split(/([-'])/)
+        .map(part =>
+          part.length > 0 && /[a-zA-Z]/.test(part[0])
+            ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+            : part
+        )
+        .join('')
+    )
+    .join(' ');
 };
