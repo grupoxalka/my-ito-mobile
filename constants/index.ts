@@ -44,3 +44,49 @@ export const dummyMessages = [
         last_message: "Recordatorio: La reunión empieza mañana a las 5 PM.",
     }
 ];
+
+export const mockFiles = [
+     {
+    id: "1",
+    subject: "Cálculo I",
+    title: "Límites y continuidad",
+    type: "PDF",
+    uploadedAt: "2025-01-01",
+  },
+  {
+    id: "2",
+    subject: "Cálculo I",
+    title: "Derivadas",
+    type: "DOCX",
+    uploadedAt: "2025-01-05",
+  },
+  {
+    id: "3",
+    subject: "Cálculo I",
+    title: "Aplicaciones de las derivadas",
+    type: "PPTX",
+    uploadedAt: "2025-01-10",
+  },
+  {
+    id: "4",
+    subject: "Física II",
+    title: "Electromagnetismo",
+    type: "PDF",
+    uploadedAt: "2025-01-02",
+  },
+  {
+    id: "5",
+    subject: "Física II",
+    title: "Óptica",
+    type: "DOCX",
+    uploadedAt: "2025-01-07",
+  },
+  {
+    id: "6",
+    subject: "Física II",
+    title: "Termodinámica",
+    type: "PPTX",
+    uploadedAt: "2025-01-08",
+  },
+    ];
+    
