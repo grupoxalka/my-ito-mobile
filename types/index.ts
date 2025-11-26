@@ -30,3 +30,15 @@ export interface JWTPayload {
   userId: string;
   exp?: number;
 }
+
+export interface Schedule {
+    classroomName: string;
+    dayOfWeek: string;
+    endTime: string;
+    groupCode: string;
+    startTime: string;
+    subjectName: string;
+    teacherName: string;
+}
+
+export type DayOfWeek = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';

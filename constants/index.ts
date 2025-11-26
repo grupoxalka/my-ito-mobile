@@ -44,3 +44,12 @@ export const dummyMessages = [
         last_message: "Recordatorio: La reunión empieza mañana a las 5 PM.",
     }
 ];
+
+// Days of the week for schedule
+export const DAYS = [
+    { key: 'MONDAY' as const, label: 'Lun' },
+    { key: 'TUESDAY' as const, label: 'Mar' },
+    { key: 'WEDNESDAY' as const, label: 'Mié' },
+    { key: 'THURSDAY' as const, label: 'Jue' },
+    { key: 'FRIDAY' as const, label: 'Vie' },
+];

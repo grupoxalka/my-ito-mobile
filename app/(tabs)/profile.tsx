@@ -9,6 +9,7 @@ import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
 import { userService } from "services/userService";
 import { useAppStore } from "store";
 import { UserProfile } from "types";
+import { capitalizeWords } from "utils";
 
 /**
  * ProfileScreen Component
@@ -87,7 +88,7 @@ export default function ProfileScreen() {
 
     // Destructure user data for easier access
     const { studentDetails: { career, currentSemester, gpa, controlNumber } } = userData;
-    const fullName = `${userData.name} ${userData.paternalSurname} ${userData.maternalSurname}`;
+    const fullName = capitalizeWords(`${userData.name} ${userData.paternalSurname} ${userData.maternalSurname}`);
     const profileImage = 'https://randomuser.me/api/portraits/lego/5.jpg';
 
     // Capitalize the first letter of the career string
