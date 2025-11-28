@@ -4,7 +4,6 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import IconNotification from "@icons/IconNotification";
 import IconUser from "@icons/IconUser";
 import Logo from "components/Logo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppStore } from "store";
 import { ROUTES } from "@constants";
 import { ThemedText } from "components/ThemedText";
@@ -13,6 +12,7 @@ import NextClass from "components/NextClass";
 import IconAdd from "@icons/IconAdd";
 import { BarChart, LineChart } from "react-native-gifted-charts";
 import { ModalNotification } from "components/ModalNotification";
+import { useAuth } from "hooks/useAuth";
 
 const dummyTodayClassesData = {
   classes: [
@@ -199,13 +199,9 @@ export default function HomeScreen() {
     });
   };
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setIsAuthenticated(!!token);
-    };
-    checkAuth();
-  }, []);
+export default function HomeScreen() {
+  const {isAuthenticated} = useAppStore();
+  useAuth();
 
   if (!isAuthenticated) {
     return <Redirect href="/login" />;

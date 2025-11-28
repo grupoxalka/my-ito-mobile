@@ -17,6 +17,7 @@ export const ROUTES = {
 } as const;
 
 export const API_URL = 'https://api.gpiconta.com/ito';
+export const TOKEN_KEY = 'token';
 
 // Dummy data for messages
 // This should be replaced with real data from the API
@@ -42,4 +43,13 @@ export const dummyMessages = [
         image: "https://randomuser.me/api/portraits/lego/2.jpg",
         last_message: "Recordatorio: La reunión empieza mañana a las 5 PM.",
     }
+];
+
+// Days of the week for schedule
+export const DAYS = [
+    { key: 'MONDAY' as const, label: 'Lun' },
+    { key: 'TUESDAY' as const, label: 'Mar' },
+    { key: 'WEDNESDAY' as const, label: 'Mié' },
+    { key: 'THURSDAY' as const, label: 'Jue' },
+    { key: 'FRIDAY' as const, label: 'Vie' },
 ];
