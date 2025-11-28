@@ -16,10 +16,15 @@ export const userService = {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             return response.data;
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
+        } catch (error: any) {
+            console.error('Error fetching user profile:', error.message);
+            // Si el servidor está caído, devolver null en lugar de lanzar error
+            if (error.response?.status === 502 || error.code === 'ERR_NETWORK') {
+                console.warn('Servidor no disponible, usando modo offline');
+                return null;
+            }
             throw new Error('Failed to fetch user profile');
         }
     },
@@ -35,10 +40,15 @@ export const userService = {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             return response.data;
-        } catch (error) {
-            console.error('Error fetching student schedule:', error);
+        } catch (error: any) {
+            console.error('Error fetching student schedule:', error.message);
+            // Si el servidor está caído, devolver array vacío en lugar de lanzar error
+            if (error.response?.status === 502 || error.code === 'ERR_NETWORK') {
+                console.warn('Servidor no disponible, usando modo offline');
+                return [];
+            }
             throw new Error('Failed to fetch student schedule');
         }
     }

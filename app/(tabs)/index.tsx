@@ -183,7 +183,8 @@ function ClassCountdown({ classTime }: { classTime: string }) {
 }
 
 export default function HomeScreen() {
-  const { isAuthenticated, setIsAuthenticated } = useAppStore();
+  const { isAuthenticated } = useAppStore();
+  useAuth();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedClass, setSelectedClass] = useState<
@@ -199,9 +200,9 @@ export default function HomeScreen() {
     });
   };
 
-export default function HomeScreen() {
-  const {isAuthenticated} = useAppStore();
-  useAuth();
+  const handleDeleteClass = (classId: string) => {
+    setSelectedClass((prev) => prev.filter((item) => item.id !== classId));
+  };
 
   if (!isAuthenticated) {
     return <Redirect href="/login" />;
@@ -241,6 +242,7 @@ export default function HomeScreen() {
                 name={classItem.name}
                 room="L6"
                 time={<ClassCountdown classTime={classItem.initial_time} />}
+                onDelete={() => handleDeleteClass(classItem.id)}
               />
             </View>
           ))}
