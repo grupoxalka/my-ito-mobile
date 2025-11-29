@@ -7,7 +7,6 @@ export const useAuth = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-
       const resetAuth = () => {
         setIsAuthenticated(false);
         setUserId(null);

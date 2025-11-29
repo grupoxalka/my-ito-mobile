@@ -9,9 +9,12 @@ export const authService = {
             const response = await axios.post(`${API_URL}/auth/sign-in`, body);
             const data = response.data;
             setToken(data.token);
-        } catch (error) {
-            console.error(error);
-            throw new Error('Login failed');
+        } catch (error: any) {
+            console.error('Login error:', error.message);
+            if (error.response?.status === 502) {
+                throw new Error('El servidor no está disponible. Por favor, intenta más tarde.');
+            }
+            throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
         }
     },
 
@@ -19,9 +22,12 @@ export const authService = {
         try {
             const response = await axios.post(`${API_URL}/auth/forgot-password`, body);
             return response.data;
-        } catch (error) {
-            console.error(error);
-            throw new Error('Forgot password request failed');
+        } catch (error: any) {
+            console.error('Forgot password error:', error.message);
+            if (error.response?.status === 502) {
+                throw new Error('El servidor no está disponible. Por favor, intenta más tarde.');
+            }
+            throw new Error(error.response?.data?.message || 'Error al recuperar contraseña');
         }
     }
 };
