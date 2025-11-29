@@ -7,6 +7,15 @@ export const useAuth = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      // 🔧 MODO OFFLINE TEMPORAL - omite el chequeo de auth
+      const isOfflineMode = process.env.EXPO_PUBLIC_OFFLINE_MODE === "true";
+
+      if (isOfflineMode) {
+        // Simula un usuario autenticado en modo offline
+        setIsAuthenticated(true);
+        setUserId("offline-user-dev");
+        return;
+      }
 
       const resetAuth = () => {
         setIsAuthenticated(false);

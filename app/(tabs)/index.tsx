@@ -1,6 +1,6 @@
 import { Link, Redirect, Stack } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, StyleSheet, ScrollView, Animated, Easing } from "react-native";
 import IconNotification from "@icons/IconNotification";
 import IconUser from "@icons/IconUser";
 import Logo from "components/Logo";
@@ -182,6 +182,114 @@ function ClassCountdown({ classTime }: { classTime: string }) {
   return <>{timeLeft.display}</>;
 }
 
+// Componente animado para NextClass con animaciones de entrada y salida
+function AnimatedNextClass({
+  classItem,
+  onDelete,
+}: {
+  classItem: any;
+  onDelete: () => void;
+}) {
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+  // 🔥 NUEVA: Animación de altura para contracción del layout
+  const heightAnim = useRef(new Animated.Value(1)).current; // 1 = altura completa
+  const [shouldRender, setShouldRender] = useState(true);
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+
+  // Animación de entrada cuando se monta el componente
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 400,
+        easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+        useNativeDriver: false, // Necesario para animar altura
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 400,
+        easing: Easing.bezier(0.34, 1.56, 0.64, 1),
+        useNativeDriver: false,
+      }),
+    ]).start();
+  }, []);
+
+  const handleDelete = () => {
+    // Animación de salida: slide + fade + contracción de altura
+    Animated.parallel([
+      // Slide hacia la derecha
+      Animated.timing(slideAnim, {
+        toValue: 300,
+        duration: 350,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        useNativeDriver: false,
+      }),
+      // Fade out
+      Animated.timing(opacityAnim, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        useNativeDriver: false,
+      }),
+      // Scale down
+      Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: 350,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        useNativeDriver: false,
+      }),
+      // 🎯 CONTRACCIÓN DE ALTURA - Esto hace que el contenido de abajo suba suavemente
+      Animated.timing(heightAnim, {
+        toValue: 0,
+        duration: 400,
+        delay: 100, // Pequeño delay para que empiece después del slide
+        easing: Easing.bezier(0.4, 0, 0.2, 1), // Material Design easing
+        useNativeDriver: false, // height no soporta native driver
+      }),
+    ]).start(() => {
+      setShouldRender(false);
+      onDelete();
+    });
+  };
+
+  if (!shouldRender) {
+    return null;
+  }
+
+  return (
+    <Animated.View
+      style={{
+        opacity: opacityAnim,
+        transform: [{ translateX: slideAnim }, { scale: scaleAnim }],
+        // 🔥 La altura se anima de measuredHeight a 0
+        height:
+          measuredHeight > 0
+            ? heightAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, measuredHeight],
+              })
+            : undefined,
+        overflow: "hidden",
+      }}
+      onLayout={(event) => {
+        // Capturar la altura real del componente la primera vez
+        if (measuredHeight === 0) {
+          setMeasuredHeight(event.nativeEvent.layout.height);
+        }
+      }}
+    >
+      <NextClass
+        name={classItem.name}
+        room="L6"
+        time={<ClassCountdown classTime={classItem.initial_time} />}
+        onDelete={handleDelete}
+      />
+    </Animated.View>
+  );
+}
+
 export default function HomeScreen() {
   const { isAuthenticated } = useAppStore();
   useAuth();
@@ -201,10 +309,14 @@ export default function HomeScreen() {
   };
 
   const handleDeleteClass = (classId: string) => {
+    // Simplemente actualiza el state - la animación de contracción la maneja AnimatedNextClass
     setSelectedClass((prev) => prev.filter((item) => item.id !== classId));
   };
 
-  if (!isAuthenticated) {
+  // 🔧 MODO OFFLINE TEMPORAL - Para revertir: cambia EXPO_PUBLIC_OFFLINE_MODE a "false" en .env.local
+  const isOfflineMode = process.env.EXPO_PUBLIC_OFFLINE_MODE === "true";
+
+  if (!isAuthenticated && !isOfflineMode) {
     return <Redirect href="/login" />;
   }
 
@@ -237,14 +349,11 @@ export default function HomeScreen() {
             <ThemedText type="title">Recordatorio</ThemedText>
           </View>
           {selectedClass.map((classItem) => (
-            <View key={classItem.id}>
-              <NextClass
-                name={classItem.name}
-                room="L6"
-                time={<ClassCountdown classTime={classItem.initial_time} />}
-                onDelete={() => handleDeleteClass(classItem.id)}
-              />
-            </View>
+            <AnimatedNextClass
+              key={classItem.id}
+              classItem={classItem}
+              onDelete={() => handleDeleteClass(classItem.id)}
+            />
           ))}
           <View style={styles.boxContainer}>
             <Button
