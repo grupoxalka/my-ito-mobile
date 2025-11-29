@@ -8,6 +8,7 @@ import IconHomeFilled from "@icons/IconHomeFilled";
 import IconCalendarFilled from "@icons/IconCalendarFilled";
 import IconFileFilled from "@icons/IconFileFilled";
 import IconMessagesFilled from "@icons/IconMessagesFilled";
+
 import {
   TAB_INDEX,
   TAB_SCHEDULE,
@@ -18,7 +19,7 @@ import {
 
 
 export default function TabsLayout() {
-
+//
     return (
         <Tabs
             screenOptions={{
@@ -28,8 +29,14 @@ export default function TabsLayout() {
                 headerRightContainerStyle : {paddingRight : 16},
                 headerLeftContainerStyle : {paddingLeft : 16},
                 tabBarLabelStyle : {fontSize: 12},
-                headerStatusBarHeight : 0,
-                headerShadowVisible : false,
+
+                headerStyle: {
+                     backgroundColor: "white",
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0
+
+                }
             }}
         >
             <Tabs.Screen
@@ -71,5 +78,8 @@ export default function TabsLayout() {
                     tabBarIcon: ({ color }) => <IconUser color={color} />
                 }} />
         </Tabs>
+
+        
     );
 }
+
