@@ -337,10 +337,7 @@ export default function HomeScreen() {
     });
   };
 
-  // 🔧 MODO OFFLINE TEMPORAL - Para revertir: cambia EXPO_PUBLIC_OFFLINE_MODE a "false" en .env.local
-  const isOfflineMode = process.env.EXPO_PUBLIC_OFFLINE_MODE === "true";
-
-  if (!isAuthenticated && !isOfflineMode) {
+  if (!isAuthenticated) {
     return <Redirect href="/login" />;
   }
 
