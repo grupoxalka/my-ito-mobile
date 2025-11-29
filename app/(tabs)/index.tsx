@@ -1,4 +1,4 @@
-import { Link, Redirect, Stack } from "expo-router";
+import { Link, Redirect, Stack, useRouter } from "expo-router";
 import React, { useEffect, useState, useRef } from "react";
 import { View, StyleSheet, ScrollView, Animated, Easing } from "react-native";
 import IconNotification from "@icons/IconNotification";
@@ -186,71 +186,73 @@ function ClassCountdown({ classTime }: { classTime: string }) {
 function AnimatedNextClass({
   classItem,
   onDelete,
+  onView,
 }: {
   classItem: any;
   onDelete: () => void;
+  onView: () => void;
 }) {
+  // Animaciones con native driver (rápidas, 60fps)
   const slideAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  // 🔥 NUEVA: Animación de altura para contracción del layout
-  const heightAnim = useRef(new Animated.Value(1)).current; // 1 = altura completa
+
+  // Animación de altura SIN native driver (necesaria para layout)
+  const heightAnim = useRef(new Animated.Value(1)).current;
+
   const [shouldRender, setShouldRender] = useState(true);
   const [measuredHeight, setMeasuredHeight] = useState(0);
 
-  // Animación de entrada cuando se monta el componente
+  // Animación de entrada - usa native driver para rendimiento
   useEffect(() => {
     Animated.parallel([
       Animated.timing(opacityAnim, {
         toValue: 1,
-        duration: 400,
-        easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-        useNativeDriver: false, // Necesario para animar altura
+        duration: 300,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
       }),
-      Animated.timing(scaleAnim, {
+      Animated.spring(scaleAnim, {
         toValue: 1,
-        duration: 400,
-        easing: Easing.bezier(0.34, 1.56, 0.64, 1),
-        useNativeDriver: false,
+        tension: 100,
+        friction: 8,
+        useNativeDriver: true,
       }),
     ]).start();
   }, []);
 
   const handleDelete = () => {
-    // Animación de salida: slide + fade + contracción de altura
+    // Fase 1: Animaciones visuales rápidas con native driver
     Animated.parallel([
-      // Slide hacia la derecha
       Animated.timing(slideAnim, {
         toValue: 300,
-        duration: 350,
-        easing: Easing.bezier(0.4, 0, 0.2, 1),
-        useNativeDriver: false,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
       }),
-      // Fade out
       Animated.timing(opacityAnim, {
         toValue: 0,
-        duration: 300,
-        easing: Easing.bezier(0.4, 0, 0.2, 1),
-        useNativeDriver: false,
+        duration: 200,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
       }),
-      // Scale down
       Animated.timing(scaleAnim, {
         toValue: 0.95,
-        duration: 350,
-        easing: Easing.bezier(0.4, 0, 0.2, 1),
-        useNativeDriver: false,
-      }),
-      // 🎯 CONTRACCIÓN DE ALTURA - Esto hace que el contenido de abajo suba suavemente
-      Animated.timing(heightAnim, {
-        toValue: 0,
-        duration: 400,
-        delay: 100, // Pequeño delay para que empiece después del slide
-        easing: Easing.bezier(0.4, 0, 0.2, 1), // Material Design easing
-        useNativeDriver: false, // height no soporta native driver
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
       }),
     ]).start(() => {
-      setShouldRender(false);
-      onDelete();
+      // Fase 2: Después del slide, contraer altura suavemente
+      Animated.timing(heightAnim, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: false, // Altura requiere JS driver
+      }).start(() => {
+        setShouldRender(false);
+        onDelete();
+      });
     });
   };
 
@@ -261,9 +263,7 @@ function AnimatedNextClass({
   return (
     <Animated.View
       style={{
-        opacity: opacityAnim,
-        transform: [{ translateX: slideAnim }, { scale: scaleAnim }],
-        // 🔥 La altura se anima de measuredHeight a 0
+        // Altura animada para contracción del layout
         height:
           measuredHeight > 0
             ? heightAnim.interpolate({
@@ -274,18 +274,26 @@ function AnimatedNextClass({
         overflow: "hidden",
       }}
       onLayout={(event) => {
-        // Capturar la altura real del componente la primera vez
         if (measuredHeight === 0) {
           setMeasuredHeight(event.nativeEvent.layout.height);
         }
       }}
     >
-      <NextClass
-        name={classItem.name}
-        room="L6"
-        time={<ClassCountdown classTime={classItem.initial_time} />}
-        onDelete={handleDelete}
-      />
+      {/* View interior con animaciones native driver */}
+      <Animated.View
+        style={{
+          opacity: opacityAnim,
+          transform: [{ translateX: slideAnim }, { scale: scaleAnim }],
+        }}
+      >
+        <NextClass
+          name={classItem.name}
+          room="L6"
+          time={<ClassCountdown classTime={classItem.initial_time} />}
+          onDelete={handleDelete}
+          onView={onView}
+        />
+      </Animated.View>
     </Animated.View>
   );
 }
@@ -293,6 +301,7 @@ function AnimatedNextClass({
 export default function HomeScreen() {
   const { isAuthenticated } = useAppStore();
   useAuth();
+  const router = useRouter();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedClass, setSelectedClass] = useState<
@@ -311,6 +320,21 @@ export default function HomeScreen() {
   const handleDeleteClass = (classId: string) => {
     // Simplemente actualiza el state - la animación de contracción la maneja AnimatedNextClass
     setSelectedClass((prev) => prev.filter((item) => item.id !== classId));
+  };
+
+  // 🎯 Navegar a la página de asistencias con los datos de la materia
+  const handleViewClass = (
+    classItem: (typeof dummyTodayClassesData.classes)[0]
+  ) => {
+    router.push({
+      pathname: "/attendance/[subject]",
+      params: {
+        subject: classItem.name.toLowerCase().replace(/\s+/g, "-"),
+        subjectName: classItem.name,
+        startTime: classItem.initial_time,
+        endTime: classItem.end_time,
+      },
+    });
   };
 
   // 🔧 MODO OFFLINE TEMPORAL - Para revertir: cambia EXPO_PUBLIC_OFFLINE_MODE a "false" en .env.local
@@ -353,6 +377,7 @@ export default function HomeScreen() {
               key={classItem.id}
               classItem={classItem}
               onDelete={() => handleDeleteClass(classItem.id)}
+              onView={() => handleViewClass(classItem)}
             />
           ))}
           <View style={styles.boxContainer}>

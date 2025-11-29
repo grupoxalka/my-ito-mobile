@@ -73,13 +73,19 @@ export default function NextClass({
           >
             <Pressable
               style={[styles.menuItem, { backgroundColor: "#B8EAAB" }]}
-              onPress={onView}
+              onPress={() => {
+                setMenuVisible(false);
+                onView?.();
+              }}
             >
               <IconEye />
             </Pressable>
             <Pressable
               style={[styles.menuItem, { backgroundColor: "#FFB5B5" }]}
-              onPress={onDelete}
+              onPress={() => {
+                setMenuVisible(false);
+                onDelete?.();
+              }}
             >
               <IconTrash />
             </Pressable>
